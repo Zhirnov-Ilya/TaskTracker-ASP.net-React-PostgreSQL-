@@ -23,6 +23,8 @@ public class NotesController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CreateNoteRequest request, CancellationToken ct)
     {
         var note = new Note(request.Title, request.Description);
+        note.SetDueDate(request.DueDate);
+        note.MarkAsIncomplete();
 
         await _dbContext.Notes.AddAsync(note, ct);
         await _dbContext.SaveChangesAsync(ct);
@@ -47,7 +49,7 @@ public class NotesController : ControllerBase
         }
 
         var noteDots = await notesQuery
-            .Select(n => new NoteDto(n.Id, n.Title, n.Description, n.CreatedAt))
+            .Select(n => new NoteDto(n.Id, n.Title, n.Description, n.CreatedAt, n.DueDate, n.IsCompleted))
             .ToListAsync(ct);
 
         return Ok(new GetNotesResponse(noteDots));
@@ -76,13 +78,35 @@ public class NotesController : ControllerBase
             return NotFound();
         }
 
-        existingNote.Update(request.Title, request.Description);
+        existingNote.Update(request.Title, request.Description, request.DueDate);
 
         _dbContext.Notes.Update(existingNote);
         await _dbContext.SaveChangesAsync(ct);
 
         return Ok();
     }
+
+    [HttpPatch("{id}/complete")]
+    public async Task<IActionResult> ToggleCompletion(Guid id, CancellationToken ct)
+    {
+        var existingNote = await _dbContext.Notes.FindAsync(new object[] { id }, ct);
+        if (existingNote == null)
+        {
+            return NotFound();
+        }
+
+        if (existingNote.IsCompleted)
+        {
+            existingNote.MarkAsIncomplete();
+        }
+        else
+        {
+            existingNote.MarkAsCompleted();
+        }
+
+        await _dbContext.SaveChangesAsync(ct);
+        return Ok();
+}
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteNote(Guid id, CancellationToken ct)

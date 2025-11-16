@@ -38,6 +38,19 @@ function App() {
     setNotes(notes || []);
    }
 
+  const filteredNotes = notes.filter(note => {
+  if (filter.status === "all") {
+    return true; // показываем все
+  }
+  if (filter.status === "active") {
+    return !note.isCompleted; // только невыполненные
+  }
+  if (filter.status === "completed") {
+    return note.isCompleted; // только выполненные
+  }
+  return true;
+  });
+
   return (
   <section className="p-8 flex flex-row justify-start items-start gap-12 min-h-screen w-screen">
     <div className="flex flex-col gap-10 w-1/3">
@@ -45,12 +58,14 @@ function App() {
       <Filters filter={filter} setFilter={setFilter}/>
     </div>
       <ul className="flex flex-col gap-5 w-1/2">
-        {notes.map( n => (
+        {filteredNotes.map( n => (
           <li key={n.id}>
           <Note id = {n.id} 
                 title={n.title} 
                 description={n.description} 
-                createdAt={n.createdAt}/>
+                createdAt={n.createdAt}
+                dueDate={n.dueDate}
+                isCompleted={n.isCompleted}/>
         </li>
         ))}
       </ul>

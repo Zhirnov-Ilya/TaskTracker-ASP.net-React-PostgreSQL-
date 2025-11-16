@@ -43,3 +43,14 @@ export const deleteNote = async (id) => {
         console.error(e);
     }
 }
+
+export const toggleNoteCompletion = async (id) => {
+    try{
+        var response = await axios.patch(`http://localhost:5220/notes/${id}/complete`);
+        return response.data;
+    } catch (e){
+        console.error(e);
+        throw e;
+    }
+};
+

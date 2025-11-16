@@ -1,14 +1,24 @@
-import {Input, Textarea, Button} from "@chakra-ui/react"
+import {Input, Textarea, Button, FormControl, FormLabel} from "@chakra-ui/react"
 import { useEffect, useState } from 'react'
 
 export default function CreateNoteForm({onCreate}) {
 
-  const [note, setNote] = useState({ title: '', description: '' });
+  const [note, setNote] = useState({ title: '', description: '', dueDate: ''});
 
   const onSubmit = (e) => {
     e.preventDefault();
-    setNote({ title: '', description: '' });
-    onCreate(note);
+
+    const noteToSend = {
+      title: note.title,
+      description: note.description,
+      dueDate: note.dueDate ? note.dueDate + ':00Z' : null // формат для .NET
+    };
+
+    console.log('Отправляем данные:', noteToSend);
+    
+    onCreate(noteToSend);
+
+    setNote({ title: '', description: '', dueDate: ''});
   }
 
   return (
@@ -22,6 +32,13 @@ export default function CreateNoteForm({onCreate}) {
                   value={note?.description ?? ""}
                   onChange={(e) => setNote({...note, description: e.target.value})}
         ></Textarea>
+        <FormControl>
+          <Input 
+            type="datetime-local"
+            value={note.dueDate}
+            onChange={(e) => setNote({...note, dueDate: e.target.value})}
+          />
+        </FormControl>
         <Button type="submit" colorScheme='teal'>Создать</Button>
       </form>
   );

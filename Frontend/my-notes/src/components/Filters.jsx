@@ -10,6 +10,15 @@ export default function Filters({filter, setFilter}){
                 <option value={"desc"}>Сначала новые</option>
                 <option value={"asc"}>Сначала старые</option>
             </Select>
+
+            <Select 
+                value={filter.status || "all"}
+                onChange={(e) => setFilter({...filter, status: e.target.value})}
+                >
+                <option value="all">Все задачи</option>
+                <option value="active">Только активные</option>
+                <option value="completed">Только выполненные</option>
+            </Select>
         </div>
     );
 }
