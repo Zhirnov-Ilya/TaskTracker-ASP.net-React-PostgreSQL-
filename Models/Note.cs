@@ -12,4 +12,20 @@ public class Note
     public string Title { get; set; }
     public string Description { get; set; }
     public DateTime CreatedAt { get; set; }
+
+    public void UpdateTitle(string newTitle)
+    {
+        Title = newTitle;
+    }
+
+    public void UpdateDescription(string newDescription)
+    {
+        Description = newDescription ?? string.Empty;
+    }
+
+    public void Update(string title, string description)
+    {
+        UpdateTitle(title);
+        UpdateDescription(description);
+    }
 }

@@ -49,3 +49,4 @@ C:\Users\Haker18\Desktop\4 курс\Технология разработки п
 C:\Users\Haker18\Desktop\4 курс\Технология разработки программного обеспечения\TaskTracker\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\Haker18\Desktop\4 курс\Технология разработки программного обеспечения\TaskTracker\bin\Debug\net9.0\Frontend\my-notes\package-lock.json
 C:\Users\Haker18\Desktop\4 курс\Технология разработки программного обеспечения\TaskTracker\bin\Debug\net9.0\Frontend\my-notes\package.json
+C:\Users\Haker18\Desktop\4 курс\Технология разработки программного обеспечения\TaskTracker\obj\Debug\net9.0\TaskTracker.sourcelink.json

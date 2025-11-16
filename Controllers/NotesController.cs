@@ -6,6 +6,7 @@ using TaskTracker.Contracts;
 using TaskTracker.DataAccess;
 using TaskTracker.Models;
 
+
 namespace TaskTracker.Controllers;
 
 [ApiController]
@@ -64,5 +65,37 @@ public class NotesController : ControllerBase
                 return note => note.Id;
             
         }
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateNote(Guid id, [FromBody] TaskTracker.Contracts.UpdateNoteRequest request, CancellationToken ct)
+    {
+        var existingNote = await _dbContext.Notes.FindAsync(new object[] {id}, ct);
+        if (existingNote == null)
+        {
+            return NotFound();
+        }
+
+        existingNote.Update(request.Title, request.Description);
+
+        _dbContext.Notes.Update(existingNote);
+        await _dbContext.SaveChangesAsync(ct);
+
+        return Ok();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteNote(Guid id, CancellationToken ct)
+    {
+        var note = await _dbContext.Notes.FindAsync(new object[] {id}, ct);
+        if (note == null)
+        {
+            return NotFound();
+        }
+
+        _dbContext.Notes.Remove(note);
+        await _dbContext.SaveChangesAsync(ct);
+
+        return Ok();
     }
 }
